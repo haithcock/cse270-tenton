@@ -10,12 +10,14 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
+
 
 class TestSmoketest():
   def setup_method(self, method):
       options = Options()
       options.add_argument("--headless=new")
-      self.driver = webdriver.Firefox()
+      self.driver = webdriver.Firefox(options=options)
       self.vars = {}
   
   def teardown_method(self, method):
