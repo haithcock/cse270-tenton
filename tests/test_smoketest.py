@@ -9,16 +9,11 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.firefox.options import Options
-
 
 class TestSmoketest():
   def setup_method(self, method):
-      options = Options()
-      options.add_argument("--headless=new")
-      self.driver = webdriver.Firefox(options=options)
-      self.vars = {}
+    self.driver = webdriver.Firefox()
+    self.vars = {}
   
   def teardown_method(self, method):
     self.driver.quit()
@@ -28,31 +23,21 @@ class TestSmoketest():
     self.driver.set_window_size(1690, 1105)
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".header-logo img")
     assert len(elements) > 0
-    self.driver.find_element(By.CSS_SELECTOR, ".header-top").click()
+    assert self.driver.find_element(By.CSS_SELECTOR, ".header-title > h1").text == "Teton Idaho"
+    assert self.driver.find_element(By.CSS_SELECTOR, ".header-title > h2").text == "Chamber of Commerce"
     assert self.driver.title == "Teton Idaho CoC"
-    elements = self.driver.find_elements(By.CSS_SELECTOR, ".header-title")
-    assert len(elements) > 0
   
   def test_2Navigatetothehomepage(self):
     self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/index.html")
-    self.driver.set_window_size(1690, 1105)
+    self.driver.set_window_size(1920, 1028)
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight1")
     assert len(elements) > 0
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight2")
     assert len(elements) > 0
-    elements = self.driver.find_elements(By.LINK_TEXT, "Join")
+    elements = self.driver.find_elements(By.LINK_TEXT, "Join Us")
     assert len(elements) > 0
-    assert self.driver.find_element(By.LINK_TEXT, "Join").text == "Join"
-    element = self.driver.find_element(By.LINK_TEXT, "Join")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element).click_and_hold().perform()
-    element = self.driver.find_element(By.LINK_TEXT, "Join")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element).perform()
-    element = self.driver.find_element(By.LINK_TEXT, "Join")
-    actions = ActionChains(self.driver)
-    actions.move_to_element(element).release().perform()
-    self.driver.find_element(By.LINK_TEXT, "Join").click()
+    self.driver.find_element(By.LINK_TEXT, "Join Us").click()
+    assert self.driver.find_element(By.CSS_SELECTOR, "section > h3").text == "Welcome to the Teton Chamber of Commerce Signup Wizard!"
   
   def test_3Navigatetothedirectorypage(self):
     self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/directory.html")
@@ -70,9 +55,6 @@ class TestSmoketest():
     elements = self.driver.find_elements(By.NAME, "fname")
     assert len(elements) > 0
     self.driver.find_element(By.NAME, "fname").click()
-    self.driver.find_element(By.NAME, "fname").click()
-    elements = self.driver.find_elements(By.NAME, "fname")
-    assert len(elements) > 0
     self.vars["John"] = self.driver.execute_script("document.querySelector(\'[name=\'fname\']\').value = \'John\';")
     self.vars["Doe"] = self.driver.execute_script("document.querySelector(\'[name=\'lname\']\').value = \'Doe\';")
     self.vars["No_thanks_LLC"] = self.driver.execute_script("document.querySelector(\'[name=\'bizname\']\').value = \'No_thanks_LLC\';")
@@ -84,12 +66,12 @@ class TestSmoketest():
   def test_5Navigatetotheadminpage(self):
     self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/admin.html")
     self.driver.set_window_size(1690, 1105)
+    elements = self.driver.find_elements(By.ID, "username")
+    assert len(elements) > 0
     self.driver.find_element(By.ID, "username").click()
     self.vars["George"] = self.driver.execute_script("document.querySelector(\'[name=\'username\']\').value = \'Geogre\';")
     self.vars["Washington"] = self.driver.execute_script("document.querySelector(\'[name=\'password\']\').value = \'Washington\';")
     self.driver.find_element(By.CSS_SELECTOR, ".mysubmit:nth-child(4)").click()
-    elements = self.driver.find_elements(By.ID, "username")
-    assert len(elements) > 0
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".errorMessage")
     assert len(elements) > 0
     assert self.driver.find_element(By.CSS_SELECTOR, ".errorMessage").text == "Invalid username and password."
