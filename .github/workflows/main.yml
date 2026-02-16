@@ -32,11 +32,11 @@ jobs:
       with:
         python-version: "3.12"
 
-    - name: Setup Firefox
-      uses: browser-actions/setup-firefox@v1
-
-    - name: Setup geckodriver
-      uses: browser-actions/setup-geckodriver@v1
+    - name: Install Firefox (non-snap) + geckodriver
+      run: |
+        sudo add-apt-repository -y ppa:mozillateam/ppa
+        sudo apt-get update
+        sudo apt-get install -y firefox-esr geckodriver
 
     - name: Install dependencies
       run: |
