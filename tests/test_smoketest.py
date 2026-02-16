@@ -14,10 +14,12 @@ from selenium.webdriver.firefox.options import Options
 
 
 class TestSmoketest():
-  def setup_method(self, method):
-    self.driver = webdriver.Firefox()
-    self.vars = {}
-  
+def setup_method(self, method):
+  options = Options()
+  options.add_argument("-headless")
+  self.driver = webdriver.Firefox(options=options)
+  self.vars = {}
+
   def teardown_method(self, method):
     self.driver.quit()
   
