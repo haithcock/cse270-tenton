@@ -23,7 +23,7 @@ class TestSmoketest():
     self.driver.quit()
   
   def test_1Navigatethehomepage(self):
-    self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/index.html")
+    self.driver.get("https://haithcock.github.io/cse270-tenton/index.html")
     self.driver.set_window_size(1690, 1105)
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".header-logo img")
     assert len(elements) > 0
@@ -32,7 +32,7 @@ class TestSmoketest():
     assert self.driver.title == "Teton Idaho CoC"
   
   def test_2Navigatetothehomepage(self):
-    self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/index.html")
+    self.driver.get("https://haithcock.github.io/cse270-tenton/index.html")
     self.driver.set_window_size(1920, 1028)
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight1")
     assert len(elements) > 0
@@ -44,7 +44,7 @@ class TestSmoketest():
     assert self.driver.find_element(By.CSS_SELECTOR, "section > h3").text == "Welcome to the Teton Chamber of Commerce Signup Wizard!"
   
   def test_3Navigatetothedirectorypage(self):
-    self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/directory.html")
+    self.driver.get("https://haithcock.github.io/cse270-tenton/directory.html")
     self.driver.set_window_size(1690, 1105)
     self.driver.find_element(By.ID, "directory-grid").click()
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)")
