@@ -11,12 +11,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 
-
 class TestSmoketest():
   def setup_method(self, method):
     options = Options()
     options.add_argument("--headless=new")
-    self.driver = webdriver.Firefox()
+    self.driver = webdriver.Firefox(options=options)
     self.vars = {}
   
   def teardown_method(self, method):
@@ -52,31 +51,4 @@ class TestSmoketest():
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)").text == "Teton Turf and Tree"
     self.driver.find_element(By.ID, "directory-list").click()
     assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)").text == "Teton Turf and Tree"
-  
-  def test_4NavigatetotheJoinPage(self):
-    self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/join.html")
-    self.driver.set_window_size(1370, 1480)
-    elements = self.driver.find_elements(By.NAME, "fname")
-    assert len(elements) > 0
-    self.driver.find_element(By.NAME, "fname").click()
-    self.vars["John"] = self.driver.execute_script("document.querySelector(\'[name=\'fname\']\').value = \'John\';")
-    self.vars["Doe"] = self.driver.execute_script("document.querySelector(\'[name=\'lname\']\').value = \'Doe\';")
-    self.vars["No_thanks_LLC"] = self.driver.execute_script("document.querySelector(\'[name=\'bizname\']\').value = \'No_thanks_LLC\';")
-    self.vars["Duke"] = self.driver.execute_script("document.querySelector(\'[name=\'biztitle\']\').value = \'Duke\';")
-    self.driver.find_element(By.NAME, "submit").click()
-    elements = self.driver.find_elements(By.NAME, "email")
-    assert len(elements) > 0
-  
-  def test_5Navigatetotheadminpage(self):
-    self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/admin.html")
-    self.driver.set_window_size(1690, 1105)
-    elements = self.driver.find_elements(By.ID, "username")
-    assert len(elements) > 0
-    self.driver.find_element(By.ID, "username").click()
-    self.vars["George"] = self.driver.execute_script("document.querySelector(\'[name=\'username\']\').value = \'Geogre\';")
-    self.vars["Washington"] = self.driver.execute_script("document.querySelector(\'[name=\'password\']\').value = \'Washington\';")
-    self.driver.find_element(By.CSS_SELECTOR, ".mysubmit:nth-child(4)").click()
-    elements = self.driver.find_elements(By.CSS_SELECTOR, ".errorMessage")
-    assert len(elements) > 0
-    assert self.driver.find_element(By.CSS_SELECTOR, ".errorMessage").text == "Invalid username and password."
   
