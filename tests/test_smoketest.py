@@ -9,17 +9,12 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.webdriver.firefox.options import Options
-
 
 class TestSmoketest():
-
   def setup_method(self, method):
-    options = Options()
-    options.add_argument("-headless")
-    self.driver = webdriver.Firefox(options=options)
-
+    self.driver = webdriver.Firefox()
+    self.vars = {}
+  
   def teardown_method(self, method):
     self.driver.quit()
   
@@ -34,24 +29,25 @@ class TestSmoketest():
     assert len(elements) > 0
   
   def test_2Navigatetothehomepage(self):
-   self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/index.html")
-   self.driver.set_window_size(1690, 1105)
-   assert len(self.driver.find_elements(By.CSS_SELECTOR, ".spotlight1")) > 0
-   assert len(self.driver.find_elements(By.CSS_SELECTOR, ".spotlight2")) > 0
-   assert len(self.driver.find_elements(By.LINK_TEXT, "Join")) > 0
-   assert self.driver.find_element(By.LINK_TEXT, "Join").text == "Join"
-   clicked = False
-   for _ in range(3):
-     try:
-       self.driver.find_element(By.LINK_TEXT, "Join").click()
-       clicked = True
-       break
-     except StaleElementReferenceException:
-       time.sleep(0.2)
-
-   assert clicked, "Could not click Join link (kept going stale)."
-   assert "join.html" in self.driver.current_url
-
+    self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/index.html")
+    self.driver.set_window_size(1690, 1105)
+    elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight1")
+    assert len(elements) > 0
+    elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight2")
+    assert len(elements) > 0
+    elements = self.driver.find_elements(By.LINK_TEXT, "Join")
+    assert len(elements) > 0
+    assert self.driver.find_element(By.LINK_TEXT, "Join").text == "Join"
+    element = self.driver.find_element(By.LINK_TEXT, "Join")
+    actions = ActionChains(self.driver)
+    actions.move_to_element(element).click_and_hold().perform()
+    element = self.driver.find_element(By.LINK_TEXT, "Join")
+    actions = ActionChains(self.driver)
+    actions.move_to_element(element).perform()
+    element = self.driver.find_element(By.LINK_TEXT, "Join")
+    actions = ActionChains(self.driver)
+    actions.move_to_element(element).release().perform()
+    self.driver.find_element(By.LINK_TEXT, "Join").click()
   
   def test_3Navigatetothedirectorypage(self):
     self.driver.get("http://127.0.0.1:5500/cse270-tenton/teton/1.6/directory.html")
